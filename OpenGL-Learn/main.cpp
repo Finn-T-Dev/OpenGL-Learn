@@ -102,17 +102,30 @@ int main()
 
 	// set up vertex data and buffer(s) and configure vertex attributes
 	// equilateral triangle vertices
+	//float vertices[] = {
+	//-0.5f, -0.5f, 0.0f,	// bottom left
+	//0.5f, -0.5f, 0.0f,	// bottom right
+	//-0.5f, 0.5f, 0.0f,	// top left
+	//0.5f, 0.5f, 0.0f	// top right
+	//};
 	float vertices[] = {
-	-0.5f, -0.5f, 0.0f,	// bottom left
-	0.5f, -0.5f, 0.0f,	// bottom right
-	-0.5f, 0.5f, 0.0f,	// top left
-	0.5f, 0.5f, 0.0f	// top right
+		// triangle 1
+		-0.8f, 0.0f, 0.0f,	// bottom left
+		-0.4f, 0.0f, 0.0f,	// bottom right
+		-0.6f, 0.2f, 0.0f,	// centre
+		// triangle 2
+		0.4f, 0.0f, 0.0f,
+		0.8f, 0.0f, 0.0f,
+		0.6f, 0.2f, 0.0f
 	};
 
 	unsigned int triangles[] = {
 		0, 1, 2,
-		1, 2, 3
+		3, 4, 5,
+
 	};
+
+
 
 	// initialise the memory buffer that stores the vertices. Array type: GL_ARRAY_BUFFER
 	unsigned int VBO;
@@ -136,7 +149,7 @@ int main()
 	// 3 copy indices into a buffer that OpenGL can use
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(triangles), triangles, GL_STATIC_DRAW);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	glViewport(0, 0, 1280, 800);
 
@@ -149,8 +162,10 @@ int main()
 
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
+
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
