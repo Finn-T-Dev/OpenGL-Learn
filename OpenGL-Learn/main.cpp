@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+// source code for fragment and vertex shaders (stored here for simplicity)
 const char* vertexShaderSource = "#version 460 core\n"
 "layout (location = 0) in vec3 aPos;\n"
 "void main()\n"
@@ -16,6 +17,8 @@ const char* fragmentShaderSource = "#version 460 core\n"
 "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
 "}\n\0";
 
+
+// function forward declarations
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 
@@ -100,10 +103,17 @@ int main()
 	// set up vertex data and buffer(s) and configure vertex attributes
 	// equilateral triangle vertices
 	float vertices[] = {
-	-0.5f, -0.5f, 0.0f,
-	0.5f, -0.5f, 0.0f,
-	0.0f, 0.5f, 0.0f
+	-0.5f, -0.5f, 0.0f,	// bottom left
+	0.5f, -0.5f, 0.0f,	// bottom right
+	-0.5f, 0.5f, 0.0f,	// top left
+	0.5f, 0.5f, 0.0f	// top right
 	};
+
+	unsigned int triangles[] = {
+		0, 1, 2,
+		1, 2, 3
+	};
+
 	// initialise the memory buffer that stores the vertices. Array type: GL_ARRAY_BUFFER
 	unsigned int VBO;
 	glGenBuffers(1, &VBO);
@@ -120,6 +130,14 @@ int main()
 	glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
+	unsigned int EBO;
+	glGenBuffers(1, &EBO);
+
+	// 3 copy indices into a buffer that OpenGL can use
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(triangles), triangles, GL_STATIC_DRAW);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
 	glViewport(0, 0, 1280, 800);
 
 	while (!glfwWindowShouldClose(window))
@@ -131,7 +149,8 @@ int main()
 
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
