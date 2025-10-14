@@ -27,10 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="BasicVertexShader.glsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <None Include="shader.fs" />
+    <None Include="shader.vs" />
   </ItemGroup>
 </Project>

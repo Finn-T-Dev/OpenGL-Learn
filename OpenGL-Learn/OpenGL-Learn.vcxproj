@@ -134,9 +134,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="BasicVertexShader.glsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="shader.h" />
+    <None Include="shader.vs" />
+    <None Include="shader.fs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
