@@ -1,7 +1,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include <shader.h>
+#include <custom/shader.h>
+#include "stb_image.h"
+
 
 // function forward declarations
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -65,6 +67,37 @@ int main()
 	glVertexAttribPointer(1, 3, GL_FLOAT, false, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
+	// ------------------------------------
+	// TEXTURE CODE
+	// ------------------------------------
+
+
+	unsigned int texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	// set texture wrapping/filtering options
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	int width, height, nrChannels;
+	unsigned char* data = stbi_load("container.jpg", &width, &height, &nrChannels, 0);
+
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	} 
+	else {
+		std::cout << "Failed to load texture :)" << std::endl;
+	}
+
+
+	stbi_image_free(data);
+
+
+
 	glViewport(0, 0, 1280, 800);
 
 	while (!glfwWindowShouldClose(window))
@@ -81,6 +114,10 @@ int main()
 		// render the triangle
 		// -------------------
 		shaderProgram.use();
+
+		int vertexOffsetLocation = glGetUniformLocation(shaderProgram.ID, "offset");
+		glUniform4f(vertexOffsetLocation, -0.5f, 0.2f, 0.0f, 1.0f);
+
 		glBindVertexArray(VAO1);
 
 		int vertexColorLocation = glGetUniformLocation(shaderProgram.ID, "ourColour");

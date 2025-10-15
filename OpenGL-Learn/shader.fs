@@ -2,7 +2,8 @@
 
 out vec4 FragColor;
 in vec3 ourColour;
+in vec3 ourPosition;
 void main() 
 {
-    FragColor = vec4(ourColour, 1.0);
+    FragColor = vec4(ourPosition, 1.0);
 }
